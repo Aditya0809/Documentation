@@ -9,11 +9,11 @@
    Get the files from the `changes-petsc/` directory in this repository.
 
 3. **Replace PETSc source files**  
-   - Overwrite `euler.c` in the cloned PETSc directory:  
+   - Download the modified `euler.c` file and overwrite the original: [Download euler.c](files/euler.c)  
      ```
      /path-to-petsc/src/ts/impls/explicit/euler.c
      ```
-   - Overwrite `tsimpl.h` located at:  
+   - Download the modified `tsimpl.h` file: [Download tsimpl.h](files/tsimpl.h), and overwite
      ```
      /path-to-petsc/include/petsc/private/tsimpl.h
      ```
