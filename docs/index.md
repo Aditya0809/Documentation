@@ -1,6 +1,6 @@
 # Homepage
 
-PetIGA is a software framework that approximates the solution of partial differential equations using isogeometric analysis. It is an extension of PETSc, adding the NURBS discretization capability and the integration of forms. This framework can be used to solve linear, nonlinear, time-dependent, or time-dependent nonlinear problems. In this framework, the user has to provide the evaluation of the linear form (right-hand side, or residual of a nonlinear problem) at a Gauss point, as well as the bilinear form (left-hand side or Jacobian of the nonlinear residual). The framework is designed so that researchers can focus on the physics of the problem and ignore issues of parallelism and performance.
+[PetIGA](https://github.com/dalcinl/PetIGA) is a software framework that approximates the solution of partial differential equations using isogeometric analysis. It is an extension of PETSc, adding the NURBS discretization capability and the integration of forms. This framework can be used to solve linear, nonlinear, time-dependent, or time-dependent nonlinear problems. In this framework, the user has to provide the evaluation of the linear form (right-hand side, or residual of a nonlinear problem) at a Gauss point, as well as the bilinear form (left-hand side or Jacobian of the nonlinear residual). The framework is designed so that researchers can focus on the physics of the problem and ignore issues of parallelism and performance.
 
 
 ## Features of PetIGA
