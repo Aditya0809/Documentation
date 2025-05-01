@@ -13,7 +13,7 @@
      ```
      /path-to-petsc/src/ts/impls/explicit/euler.c
      ```
-   - Download the modified `tsimpl.h` file: [Download tsimpl.h](files/tsimpl.h), and overwite
+   - Download the modified `tsimpl.h` file: [Download tsimpl.h](files/tsimpl.h), and overwite [Download](files/changes-petsc.zip)
      ```
      /path-to-petsc/include/petsc/private/tsimpl.h
      ```
@@ -44,7 +44,7 @@
 
 ## PetIGA
 
-This project uses a modified version of PetIGA, initially developed by L. Dalcin et al. Follow the steps below to install it:
+This project uses a modified version of PetIGA, initially developed by L. Dalcin et al. Follow the steps below to install it: [Download](files/mod_PetIGA.zip)
 
 1. Navigate to the mod_PetIGA folder you've downloaded.
 2. Execute "make all" and then "make test" for compilation and testing.
