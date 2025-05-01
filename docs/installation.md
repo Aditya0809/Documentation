@@ -1,18 +1,52 @@
 # Software Installation
 
-## Petsc
+## PETSc
 
-* Clone the [Petsc](https://petsc.org/release/install/download/) repository
-* Obtain the modified files from the "changes-petsc" directory in this repository
-* In the cloned PETSc directory, replace euler.c with the modified version from "changes-petsc". This file is located at /path-to-petsc/src/ts/impls/explicit/.
-* Replace tsimpl.h similarly, with its modified version found in "changes-petsc", located at /path-to-petsc-3.15.4/include/petsc/private/tsimpl.h/.
-* Follow the configuration and compilation instructions provided at: [petsc_installation](https://petsc.org/release/install/install/.) Configuration options may vary; for example, I use: OPTFLAGS="-Ofast -march=native -mavx2 -mfma -fno-finite-math-only" ./configure --with-debugging=no COPTFLAGS="$OPTFLAGS" CXXOPTFLAGS="$OPTFLAGS" FOPTFLAGS="$OPTFLAGS" --with-blaslapack-dir=$MKLROOT --with-scalapack-lib="-L$MKLROOT/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64" --with-scalapack-include=$MKLROOT/include
-* Set the PETSC_DIR and PETSC_ARCH environment variables to their appropriate paths (visible upon successful configuration).
+1. **Clone the PETSc repository**  
+   [Download PETSc](https://petsc.org/release/install/download/)
+
+2. **Copy modified files from this repository**  
+   Get the files from the `changes-petsc/` directory in this repository.
+
+3. **Replace PETSc source files**  
+   - Overwrite `euler.c` in the cloned PETSc directory:  
+     ```
+     /path-to-petsc/src/ts/impls/explicit/euler.c
+     ```
+   - Overwrite `tsimpl.h` located at:  
+     ```
+     /path-to-petsc/include/petsc/private/tsimpl.h
+     ```
+
+4. **Configure and compile PETSc**  
+   Follow the official guide: [PETSc Installation](https://petsc.org/release/install/install/)  
+   Example configuration:
+   ```bash
+   OPTFLAGS="-Ofast -march=native -mavx2 -mfma -fno-finite-math-only"
+   ./configure --with-debugging=no \
+       COPTFLAGS="$OPTFLAGS" \
+       CXXOPTFLAGS="$OPTFLAGS" \
+       FOPTFLAGS="$OPTFLAGS" \
+       --with-blaslapack-dir=$MKLROOT \
+       --with-scalapack-lib="-L$MKLROOT/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64" \
+       --with-scalapack-include=$MKLROOT/include
+   make all
+   ```
+
+5.  **Set environment variables**
+    After successful configuration, define the following:
+    ```bash
+        export PETSC_DIR=/path/to/petsc
+        export PETSC_ARCH=your-architecture-name
+    ```
+
+
 
 ## PetIGA
 
-This project also leverages a specialized version of PetIGA, initially developed by L. Dalcin et al. . To install it, follow these directions:
+This project uses a modified version of PetIGA, initially developed by L. Dalcin et al. Follow the steps below to install it:
 
-* Navigate to the mod_PetIGA folder you've downloaded.
-* Execute "make all" and then "make test" for compilation and testing.
-* Define the PETIGA_DIR and PETIGA_ARCH environment variables with their corresponding paths.
+1. Navigate to the mod_PetIGA folder you've downloaded.
+2. Execute "make all" and then "make test" for compilation and testing.
+3. Define the PETIGA_DIR and PETIGA_ARCH environment variables with their corresponding paths.
+
