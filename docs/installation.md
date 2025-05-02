@@ -1,5 +1,11 @@
 # Software Installation
 
+## Necessary modules
+
+1.  module load intelmpi/2021.3.0-intel2021.3.0
+2.  anaconda (for IGAKIT) 
+
+
 ## PETSc
 
 1. **Clone the PETSc repository**  : [Download PETSc](https://petsc.org/release/install/download/)
@@ -110,16 +116,20 @@
 ## PetIGA
 
 This project uses a modified version of **PetIGA**, originally developed by L. Dalcin et al. You can download our version here: [Download mod_PetIGA.zip](files/mod_PetIGA.zip) 
-1. Navigate to the `mod_PetIGA` folder you've downloaded. 
-2. Run: ```bash make all make test ``` 
-3. Set the following environment variables: ```bash export PETIGA_DIR=/path/to/PetIGA export PETIGA_ARCH=your-arch ``` 
+
+1.  Navigate to the `mod_PetIGA` folder you've downloaded. 
+2.  Run: ```bash make all make test ``` 
+3.  Set the following environment variables: ```bash export PETIGA_DIR=/path/to/PetIGA export PETIGA_ARCH=your-arch ``` 
+
 
 ### Why we modified PetIGA 
 
-The original PetIGA implementation performs explicit time stepping as: \[ U^{n+1} = U^n + \Delta t \cdot \mathcal{R}(U^n) \]. However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. The proper discretized formulation is: \[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \] 
-To avoid the cost of inverting \( M \), we apply the **lumped mass matrix** technique, where: \[ \mathcal{M}_{AB} = \begin{cases} \sum_b M_{Ab} & \text{if } A = B \\ 0 & \text{otherwise} \end{cases} \] 
-This converts the system into a diagonal form, allowing for efficient inversion: \[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \] 
-This modification improves performance in explicit schemes while maintaining physical correctness. 
+The original PetIGA implementation performs explicit time stepping as: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
+However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. 
+The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
+To avoid the cost of inverting \( M \), we apply the **lumped mass matrix** technique, where: \\[ \mathcal{M}_{AB} = \begin{cases} \sum_b M_{Ab} & \text{if } A = B \\\\ 0 & \text{otherwise} \end{cases} \\] 
+This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
+This modification improves performance in explicit schemes while maintaining physical correctness.
 
 
 
