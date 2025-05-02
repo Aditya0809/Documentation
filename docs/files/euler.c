@@ -11,7 +11,7 @@ static PetscErrorCode TSStep_Euler(TS ts)
 {
   TS_Euler       *euler = (TS_Euler*)ts->data;
   Vec            solution = ts->vec_sol,update = euler->update;
-  Vec		 lmc = ts->vec_lump,update2 = euler->update;
+  Vec		          lmc = ts->vec_lump,update2 = euler->update;
   PetscBool      stageok,accept = PETSC_TRUE;
   PetscReal      next_time_step = ts->time_step;
   PetscErrorCode ierr;
@@ -21,7 +21,6 @@ static PetscErrorCode TSStep_Euler(TS ts)
   ierr = TSComputeRHSFunction(ts,ts->ptime,solution,update);CHKERRQ(ierr);
   ierr = VecPointwiseDivide(update2,update,lmc);
   ierr = VecAXPY(solution,ts->time_step,update2);CHKERRQ(ierr);
-  //ierr = VecAYPX(update,ts->time_step,solution);CHKERRQ(ierr);
   ierr = TSPostStage(ts,ts->ptime,0,&solution);CHKERRQ(ierr);
   ierr = TSAdaptCheckStage(ts->adapt,ts,ts->ptime,solution,&stageok);CHKERRQ(ierr);
   if (!stageok) {ts->reason = TS_DIVERGED_STEP_REJECTED; PetscFunctionReturn(0);}
@@ -30,7 +29,6 @@ static PetscErrorCode TSStep_Euler(TS ts)
 
   ierr = TSAdaptChoose(ts->adapt,ts,ts->time_step,NULL,&next_time_step,&accept);CHKERRQ(ierr);
   if (!accept) {ts->reason = TS_DIVERGED_STEP_REJECTED; PetscFunctionReturn(0);}
-  //ierr = VecCopy(update,solution);CHKERRQ(ierr);
   ierr = VecCopy(solution,update);CHKERRQ(ierr);
   ierr = VecCopy(solution,ts->vec_sol);CHKERRQ(ierr);
 
