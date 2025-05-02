@@ -2,8 +2,7 @@
 
 ## PETSc
 
-1. **Clone the PETSc repository**  
-   [Download PETSc](https://petsc.org/release/install/download/)
+1. **Clone the PETSc repository**  : [Download PETSc](https://petsc.org/release/install/download/)
 
 2. **Copy modified files from this repository**  
    This project uses a modified version of PETSc to support **explicit time stepping with a lumped mass matrix** in the IGA context.
@@ -15,9 +14,9 @@
 
     You can download the modified versions from this repository: [changes_petsc](files/changes_petsc.zip)
 
-### 🔧 Summary of Changes
+    🔧 **Summary of Changes**
 
-#### ✅ `tsimpl.h` (structure update)
+    ✅ `tsimpl.h` (structure update)
 
     A new vector field for the lumped mass matrix has been added to the internal `TS` structure:
 
@@ -25,63 +24,64 @@
     /*----------------------- Lumped Mass Matrix -----------------------------------*/
     Vec vec_lump;
     ```
-   - This line is inserted inside the `_p_TS` structure to store the vector of lumped mass coefficients. 
+    This line is inserted inside the `_p_TS` structure to store the vector of lumped mass coefficients. 
 
-#### ✅ `euler.c` (RHS update in TSStep_Euler())
+    ✅ `euler.c` (RHS update in TSStep_Euler())
 
- The right-hand side (RHS) vector is now divided by the lumped mass vector (`vec_lump`) before updating the solution, as shown below:
+    The right-hand side (RHS) vector is now divided by the lumped mass vector (`vec_lump`) before updating the solution, as shown below:
 
-  ```c
-    TS_Euler       *euler = (TS_Euler*)ts->data;
-    Vec            solution = ts->vec_sol, update = euler->update;
-    Vec            lmc = ts->vec_lump, update2 = euler->update;
-    PetscBool      stageok, accept = PETSC_TRUE;
-    PetscReal      next_time_step = ts->time_step;
-    PetscErrorCode ierr;
+    ```c
+        TS_Euler       *euler = (TS_Euler*)ts->data;
+        Vec            solution = ts->vec_sol, update = euler->update;
+        Vec            lmc = ts->vec_lump, update2 = euler->update;
+        PetscBool      stageok, accept = PETSC_TRUE;
+        PetscReal      next_time_step = ts->time_step;
+        PetscErrorCode ierr;
 
-    PetscFunctionBegin;
-    ierr = TSPreStage(ts, ts->ptime);CHKERRQ(ierr);
-    ierr = TSComputeRHSFunction(ts, ts->ptime, solution, update);CHKERRQ(ierr);
-    ierr = VecPointwiseDivide(update2, update, lmc);
-    ierr = VecAXPY(solution, ts->time_step, update2);CHKERRQ(ierr);
-    ierr = TSPostStage(ts, ts->ptime, 0, &solution);CHKERRQ(ierr);
-    ierr = TSAdaptCheckStage(ts->adapt, ts, ts->ptime, solution, &stageok);CHKERRQ(ierr);
-    if (!stageok) {
-    ts->reason = TS_DIVERGED_STEP_REJECTED;
-    PetscFunctionReturn(0);
-    }
-    ierr = TSFunctionDomainError(ts, ts->ptime + ts->time_step, update, &stageok);CHKERRQ(ierr);
-    if (!stageok) {
-    ts->reason = TS_DIVERGED_STEP_REJECTED;
-    PetscFunctionReturn(0);
-    }
-    ierr = TSAdaptChoose(ts->adapt, ts, ts->time_step, NULL, &next_time_step, &accept);CHKERRQ(ierr);
-    if (!accept) {
-    ts->reason = TS_DIVERGED_STEP_REJECTED;
-    PetscFunctionReturn(0);
-    }
-    ierr = VecCopy(solution, update);CHKERRQ(ierr);
-    ierr = VecCopy(solution, ts->vec_sol);CHKERRQ(ierr);
+        PetscFunctionBegin;
+        ierr = TSPreStage(ts, ts->ptime);CHKERRQ(ierr);
+        ierr = TSComputeRHSFunction(ts, ts->ptime, solution, update);CHKERRQ(ierr);
+        ierr = VecPointwiseDivide(update2, update, lmc);
+        ierr = VecAXPY(solution, ts->time_step, update2);CHKERRQ(ierr);
+        ierr = TSPostStage(ts, ts->ptime, 0, &solution);CHKERRQ(ierr);
+        ierr = TSAdaptCheckStage(ts->adapt, ts, ts->ptime, solution, &stageok);CHKERRQ(ierr);
+        if (!stageok) {
+        ts->reason = TS_DIVERGED_STEP_REJECTED;
+        PetscFunctionReturn(0);
+        }
+        ierr = TSFunctionDomainError(ts, ts->ptime + ts->time_step, update, &stageok);CHKERRQ(ierr);
+        if (!stageok) {
+        ts->reason = TS_DIVERGED_STEP_REJECTED;
+        PetscFunctionReturn(0);
+        }
+        ierr = TSAdaptChoose(ts->adapt, ts, ts->time_step, NULL, &next_time_step, &accept);CHKERRQ(ierr);
+        if (!accept) {
+        ts->reason = TS_DIVERGED_STEP_REJECTED;
+        PetscFunctionReturn(0);
+        }
+        ierr = VecCopy(solution, update);CHKERRQ(ierr);
+        ierr = VecCopy(solution, ts->vec_sol);CHKERRQ(ierr);
 
-    ts->ptime += ts->time_step;
-    ts->time_step = next_time_step;
-    PetscFunctionReturn(0);
-  ```
+        ts->ptime += ts->time_step;
+        ts->time_step = next_time_step;
+        PetscFunctionReturn(0);
+    ```
 
- These changes enable the use of lumped mass matrix-based explicit integration schemes, which are particularly useful when using PetIGA for transient simulations.
+    These changes enable the use of lumped mass matrix-based explicit integration schemes, which are particularly useful when using PetIGA for transient simulations.
 
 
 
 
 3. **Replace PETSc source files**  
-   - Download the modified `euler.c` file and overwrite the original:
-     ```
-     /path-to-petsc/src/ts/impls/explicit/euler.c
-     ```
-   - Download the modified `tsimpl.h` file:
+   - Change `tsimpl.h` file located at:
      ```
      /path-to-petsc/include/petsc/private/tsimpl.h
      ```
+   - Overwite the original euler.c found at:
+     ```
+     /path-to-petsc/src/ts/impls/explicit/euler.c
+     ```
+
 
 4. **Configure and compile PETSc**  
    Follow the official guide: [PETSc Installation](https://petsc.org/release/install/install/)  
@@ -109,9 +109,21 @@
 
 ## PetIGA
 
-This project uses a modified version of PetIGA, initially developed by L. Dalcin et al. Follow the steps below to install it: [Download](files/mod_PetIGA.zip)
+This project uses a modified version of **PetIGA**, originally developed by L. Dalcin et al. You can download our version here: [Download mod_PetIGA.zip](files/mod_PetIGA.zip) 
+1. Navigate to the `mod_PetIGA` folder you've downloaded. 
+2. Run: ```bash make all make test ``` 
+3. Set the following environment variables: ```bash export PETIGA_DIR=/path/to/PetIGA export PETIGA_ARCH=your-arch ``` 
 
-1. Navigate to the mod_PetIGA folder you've downloaded.
-2. Execute "make all" and then "make test" for compilation and testing.
-3. Define the PETIGA_DIR and PETIGA_ARCH environment variables with their corresponding paths.
+### Why we modified PetIGA 
 
+The original PetIGA implementation performs explicit time stepping as: \[ U^{n+1} = U^n + \Delta t \cdot \mathcal{R}(U^n) \]. However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. The proper discretized formulation is: \[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \] 
+To avoid the cost of inverting \( M \), we apply the **lumped mass matrix** technique, where: \[ \mathcal{M}_{AB} = \begin{cases} \sum_b M_{Ab} & \text{if } A = B \\ 0 & \text{otherwise} \end{cases} \] 
+This converts the system into a diagonal form, allowing for efficient inversion: \[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \] 
+This modification improves performance in explicit schemes while maintaining physical correctness. 
+
+
+
+
+## IGAKit for visualization
+
+To download and install IGAKIT follow the instruction given [here]( https://github.com/dalcinl/igakit).
