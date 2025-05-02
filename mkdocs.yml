@@ -1,5 +1,7 @@
-site_name: MkDocs YouTube Tutorial
-site_url: https://james-willett.github.io/mkdocs-material-youtube-tutorial/
+site_name: Explicit PetIGA documentation
+site_description: Documentation for Explicit PetIGA
+site_author: Aditya Paspunurwar
+site_url: https://aditya0809.github.io/Documentation
 theme:
   name: material
   features:
@@ -34,11 +36,9 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/james-willett
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/TheJamesWillett
+      link: https://github.com/Aditya0809
     - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/willettjames/
+      link: https://www.linkedin.com/in/aditya-paspunurwar/
 
 markdown_extensions:
   - pymdownx.highlight:
