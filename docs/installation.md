@@ -136,15 +136,89 @@ The original PetIGA implementation performs explicit time stepping as: \\[ U^{n+
 However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. 
 The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
-\\[
-\mathcal{M}_{AB} = \sum\limits_{b=1}^{n_b} M_{Ab} & \text{if } A = B \\
-\mathcal{M}_{AB} = 0 & \text{if } A \neq B
-\\]
+\\[ \mathcal{M}_{AB} = \sum_{b=1}^{n_b} M_{Ab} & \text{if} A = B \\]
+\\[ \mathcal{M}_{AB} = 0 & \text{if } A \neq B \\]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.
+
+### Extra note on the **explicit RHS helper**
+
+In the stock PetIGA API you call `IGACreateTS()` (implicit, Jacobian‑based) or `IGACreateTS2()` (matrix‑free).  
+For purely explicit schemes we added a convenience wrapper:
+
+```c
+    /* Purpose: create a PETSc TS object, attach the IGA,
+    *          and wire the **right‑hand side only** callback
+    *          required for explicit time steppers (TSEULER, TSRK, etc.) */
+    PetscErrorCode IGACreateTS3(IGA iga, TS *ts)
+    {
+    MPI_Comm       comm;
+    Vec            U;
+    Vec            F;
+    Mat            J;
+    PetscErrorCode ierr;
+
+    PetscFunctionBegin;
+    PetscValidHeaderSpecific(iga,IGA_CLASSID,1);
+    PetscValidPointer(ts,2);
+
+    ierr = IGAGetComm(iga,&comm);CHKERRQ(ierr);
+    ierr = TSCreate(comm,ts);CHKERRQ(ierr);
+    ierr = PetscObjectCompose((PetscObject)*ts,"IGA",(PetscObject)iga);CHKERRQ(ierr);
+    ierr = IGASetOptionsHandlerTS(*ts);CHKERRQ(ierr);
+
+    ierr = IGACreateVec(iga,&U);CHKERRQ(ierr);
+    ierr = TSSetSolution(*ts,U);CHKERRQ(ierr);
+    ierr = VecDestroy(&U);CHKERRQ(ierr);
+
+    ierr = IGACreateVec(iga,&F);CHKERRQ(ierr);
+    ierr = TSSetRHSFunction(*ts,F,IGATSFormRHSFunction,iga);CHKERRQ(ierr);
+    ierr = VecDestroy(&F);CHKERRQ(ierr);
+
+    PetscFunctionReturn(0);
+    }
+```
+
+Key steps inside `IGACreateTS3()` :
+
+| Step | What it does |
+|------|--------------|
+| **1** | `TSCreate` and attach the IGA object via `PetscObjectCompose`. |
+| **2** | Allocate a global vector **U** and register it with `TSSetSolution`. |
+| **3** | Allocate a work vector **F** and register **only the RHS** via `TSSetRHSFunction`; no Jacobian is set. |
+
+The actual residual assembly is delegated to `IGATSFormRHSFunction()`, so later you simply call:
+
+```c
+    TSSetType(ts, TSEULER);   /* or TSRK, etc. */
+    TSSolve(ts, U);           /* PETSc advances with explicit lumped‑mass update */
+```
 
 
 
 ## IGAKit for Visualization
 
 To download and install IGAKit, follow the instructions provided in the [official GitHub repository](https://github.com/dalcinl/igakit).
+
+**IGAKit** is a lightweight Python toolkit that complements PetIGA by providing:
+
+* **Geometry generation & manipulation**  
+  – construct NURBS curves, surfaces, and volumes directly in Python.
+
+* **Visualisation helpers**  
+  – export control meshes, knot lines, and solution fields (VTK) for ParaView or VisIt.
+
+* **I/O utilities**  
+  – read/write `.iga` and IGES files, perform uniform refinements, and inspect knot vectors.
+
+In this documentation we will use IGAKit mainly to **visualise simulation output** produced by PetIGA - converting `.dat` files to `.vtk` files, which can be visualized in paraview.  
+
+
+**Installation tip:** IGAKit is pure‑Python. Activate your conda environment on Bridges2 and run  
+```bash
+     pip install --user igakit
+```  
+or clone the repo and install manually:  
+```bash
+     python setup.py install --user
+```
