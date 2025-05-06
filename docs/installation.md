@@ -130,13 +130,13 @@ The original PetIGA implementation performs explicit time stepping as: \\[ U^{n+
 However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. 
 The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
-\[
+\\[
 \mathcal{M}_{AB} =
 \begin{cases}
-\sum\limits_{b=1}^{n_b} M_{Ab} & \text{if } A = B \\\\
+\sum\limits_{b=1}^{n_b} M_{Ab} & \text{if } A = B \\
 0 & \text{if } A \neq B
 \end{cases}
-\]
+\\]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.
 

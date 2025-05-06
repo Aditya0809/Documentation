@@ -3,34 +3,44 @@
 [PetIGA](https://github.com/dalcinl/PetIGA) is a software framework that approximates the solution of partial differential equations using isogeometric analysis. It is an extension of PETSc, adding the NURBS discretization capability and the integration of forms. This framework can be used to solve linear, nonlinear, time-dependent, or time-dependent nonlinear problems. In this framework, the user has to provide the evaluation of the linear form (right-hand side, or residual of a nonlinear problem) at a Gauss point, as well as the bilinear form (left-hand side or Jacobian of the nonlinear residual). The framework is designed so that researchers can focus on the physics of the problem and ignore issues of parallelism and performance.
 
 
-## Features of PetIGA
+# Welcome to the PetIGA + PETSc Documentation
 
+**PetIGA** extends the PETSc toolkit by adding NURBS‐based isogeometric discretisation and automated form integration.  With it you can build 2‑D and 3‑D solvers—linear or nonlinear, steady or transient—without writing domain‑decomposition, MPI halo‑exchange, or low‑level assembly code.  Your task is reduced to coding the residual (or right‑hand side) and, if needed, the Jacobian at each Gauss point; PetIGA and PETSc handle everything else.
 
-* Flexibility and Robustness: PetIGA supports various nonlinear and linear problems in solid and fluid mechanics, demonstrating strong scaling on up to 4096 cores.
+---
 
-* Parallel Scalability: The framework is well-suited for large-scale applications, ensuring efficient parallel scalability.
+## Why this guide focuses on **explicit** schemes first  
 
-* Support for Numerical Differentiation: PetIGA includes support for numerical differentiation, which is essential for evaluating the Jacobians.
+| Benefit | Comment |
+|---------|---------|
+| **Low memory footprint** | No global matrix inversion; ideal when the number of DOFs is very large. |
+| **No Jacobian required** | Saves coding effort and sidesteps numerical differentiation costs. |
+| **Embarrassingly parallel** | Each time step is mostly local, giving excellent scalability. |
+| **Simple to implement** | Update rule is a vector operation; easier for newcomers. |
 
-* Open-Source and Extensible: The framework is open-source and designed to be reusable, promoting code reuse and flexibility in scientific research.
+> **Caveat:** stability is dictated by a CFL‑type time‐step limit.  We’ll show you how to choose a safe Δt.
 
-## Objectives
+---
 
-This documentation provides an overview of the PetIGA framework, including its features, capabilities, and applications. It is intended for beginners who want to understand the usage of PetIGA. The documentation covers some simple tutorials and examples to help users get started with the framework and apply it to solve real-world problems in solid and fluid mechanics.
+## Snapshot of PetIGA’s capabilities
 
-### Codeblocks
+* **NURBS / B‑spline basis** for exact CAD geometry and high‑order, \(C^{p-1}\) continuity.
+* **Unified API** for linear, nonlinear, and time‑dependent PDEs.
+* **Strong scaling demonstrated** to 4 096 CPU cores on problems in solid & fluid mechanics.
+* **Automatic numerical differentiation** available when an analytic Jacobian is tedious.
+* **Open‑source, MIT licence** – easy to hack, extend, and reuse alongside PETSc’s solvers and preconditioners.
 
-Some `code` goes here.
+---
 
-### Plain codeblock
+## What you’ll find in this documentation
 
-A plain codeblock:
+1. **Quick‑start tutorials** – from compiling PETSc + PetIGA to running your first 2‑D diffusion example.  
+2. **Explicit time‑stepping recipes** – choosing Δt, managing output, and monitoring stability.  
+3. **Worked examples** in solid (elastic plate) and fluid (2‑D advection–diffusion) mechanics.  
+4. **Scaling tips** – how to push your model to hundreds of millions of DOFs.  
+5. **Reference pages** – installation flags, command‑line options, and helper scripts.
 
-```
-Some code here
-def myfunction()
-// some comment
-```
+Whether you are a graduate student prototyping a new constitutive law or an engineer scaling to thousands of cores, this guide will get you productive with PetIGA and PETSc.
 
 #### Code for a specific language
 
