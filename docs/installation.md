@@ -39,7 +39,7 @@ Here is a detailed guide for installing PETSc, modified PetIGA, and IgaKit on th
 
     The right-hand side (RHS) vector is now divided by the lumped mass vector (`vec_lump`) before updating the solution, as shown below:
 
-    ```c
+    ```c hl_lines="2 3 10 11 12"
         TS_Euler       *euler = (TS_Euler*)ts->data;
         Vec            solution = ts->vec_sol, update = euler->update;
         Vec            lmc = ts->vec_lump, update2 = euler->update;
@@ -136,8 +136,10 @@ The original PetIGA implementation performs explicit time stepping as: \\[ U^{n+
 However, this ignores the presence of the **mass matrix**, which should appear in the weak form of time discretization. 
 The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
-\\[ \mathcal{M}_{AB} = \sum_{b=1}^{n_b} M_{Ab} & \text{if} A = B \\]
-\\[ \mathcal{M}_{AB} = 0 & \text{if } A \neq B \\]
+\[ 
+\mathcal{M}_{AB} = \sum_{b=1}^{n_b} M_{Ab} & \text{if} A = B
+\mathcal{M}_{AB} = 0 & \text{if } A \neq B 
+\]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.
 
@@ -211,7 +213,7 @@ To download and install IGAKit, follow the instructions provided in the [officia
 * **I/O utilities**  
   – read/write `.iga` and IGES files, perform uniform refinements, and inspect knot vectors.
 
-In this documentation we will use IGAKit mainly to **visualise simulation output** produced by PetIGA - converting `.dat` files to `.vtk` files, which can be visualized in paraview.  
+In this documentation we will use IGAKit mainly to **visualise simulation output** produced by PetIGA by converting `.dat` files to `.vtk` files, which can be visualized in paraview.  
 
 
 **Installation tip:** IGAKit is pure‑Python. Activate your conda environment on Bridges2 and run  

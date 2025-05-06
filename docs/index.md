@@ -1,4 +1,4 @@
-# Welcome to the Explicit PetIGA Documentation
+# Homepage
 
 [PetIGA](https://github.com/dalcinl/PetIGA) extends the [PETSc](https://petsc.org/release/) toolkit by adding NURBS‐based isogeometric discretisation and automated form integration.  With it you can build 2‑D and 3‑D solvers—linear or nonlinear, steady or transient—without writing domain‑decomposition, MPI halo‑exchange, or low‑level assembly code.  The major aim while using PetIGA is to code the residual (or right‑hand side in explicit cases) and, if needed, the Jacobian at each Gauss point; PetIGA and PETSc handles everything else.
 
