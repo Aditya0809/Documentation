@@ -1,11 +1,12 @@
 # Software Installation
 
-Here is a detailed guide for installing PETSc, PetIGA, and IgaKit on the Bridges2 cluster.
+Here is a detailed guide for installing PETSc, modified PetIGA, and IgaKit on the Bridges2 cluster.
 
 ## Necessary modules
 
-1.  module load intelmpi/2021.3.0-intel2021.3.0
-2.  anaconda (for IGAKIT) 
+1.  mkl
+2.  intelmpi/2021.3.0-intel2021.3.0
+3.  anaconda (for IGAKIT) 
 
 
 ## PETSc
@@ -115,13 +116,18 @@ Here is a detailed guide for installing PETSc, PetIGA, and IgaKit on the Bridges
 
 
 
+
 ## PetIGA
 
 This project uses a modified version of **PetIGA**, originally developed by L. Dalcin et al. You can download our version here: [Download mod_PetIGA.zip](files/mod_PetIGA.zip) 
 
 1.  Navigate to the `mod_PetIGA` folder you've downloaded. 
 2.  Run: ```make all make test ```  for compilation and testing
-3.  Set the following environment variables: ```bash export PETIGA_DIR=/path/to/mod_PetIGA export PETIGA_ARCH=your-arch ``` 
+3.  Set the following environment variables: 
+    ```bash
+        export PETIGA_DIR=/path/to/mod_PetIGA 
+        export PETIGA_ARCH=your-arch 
+    ``` 
 
 
 ### Why we modified PetIGA 
@@ -131,11 +137,8 @@ However, this ignores the presence of the **mass matrix**, which should appear i
 The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
 \\[
-\mathcal{M}_{AB} =
-\begin{cases}
-\sum\limits_{b=1}^{n_b} M_{Ab} & \text{if } A = B \\
-0 & \text{if } A \neq B
-\end{cases}
+\mathcal{M}_{AB} = \sum\limits_{b=1}^{n_b} M_{Ab} & \text{if } A = B \\
+\mathcal{M}_{AB} = 0 & \text{if } A \neq B
 \\]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.
