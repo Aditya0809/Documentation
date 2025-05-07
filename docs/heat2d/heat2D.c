@@ -45,8 +45,6 @@ PetscErrorCode Residual(IGAPoint pnt,
   PetscInt a,nen = pnt->nen;
   for (a=0; a<nen; a++) { Ra[a][0] = -alpha*(N1[a][0]*grad[0] + N1[a][1]*grad[1]); }	
 
-
-
   return 0;
 }
 
@@ -177,7 +175,6 @@ PetscErrorCode OutputMonitor(TS ts,PetscInt step,PetscReal t,Vec U,void *mctx)
 
   PetscInt fac = 2.0/user->dt;
 
-  user->count = 0;
 
   if(step%fac==0)
   { 

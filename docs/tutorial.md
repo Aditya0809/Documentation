@@ -40,7 +40,7 @@ T(\mathbf x,0)=T_\text{init}(\mathbf x).
 
 Because we prescribe periodicity, there is no Dirichlet (\(\Gamma_D\)) or Neumann (\(\Gamma_N\)) boundary—the domain wraps onto itself.
 
-*You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.*
+**You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.**
 ---
 
 ## 3 · Get the demo codes from  [heat2d](files/heat2d.zip)
@@ -51,10 +51,9 @@ This folder contains heat2D.c file, a makefile, a post processing file named pos
 
 ## 4 · Quick insights into the code 
 
-### 4.1 Residual assemly
+### 4.1 Residual assembly
 
-The **Residual()** callback implements the weak form after multiplying the PDE by a test function, integrating by parts, and inserting the B‑spline shape functions.  
-For heat conduction the residual per basis function \(N_a\) is  
+The **Residual()** callback implements the weak form after multiplying the PDE by a test function, integrating by parts, and inserting the B‑spline shape functions. For heat conduction the residual per basis function \(N_a\) is  
 
 \[
 R_a = -\alpha \, \nabla N_a \!\cdot\! \nabla T ,
@@ -69,7 +68,7 @@ PetscErrorCode Residual(IGAPoint pnt,
                         PetscScalar *Re,void *ctx)
 {
 
-	AppCtx *user = (AppCtx *)ctx;
+  AppCtx *user = (AppCtx *)ctx;
   PetscScalar sol; 
   PetscScalar grad[2];
   IGAPointFormValue(pnt,U,&sol);
@@ -91,15 +90,27 @@ PetscErrorCode Residual(IGAPoint pnt,
 
 ### 4.2  Initial condition
 
-Modify the hotspot profile in FormInitialCondition():
+Modify the temperature profile in FormInitialCondition():
 ```c
     T = 100.0*(1-(dist/(0.5*user->Lx*1.414))*(dist/(0.5*user->Lx*1.414)));
 ```
 
 ### 4.3  Output Monitor
 
-OutputMonitor controls the frequency of writing the .dat file which contains the control variables. It also computes the lumped mass matrix vector which is substitued to ts->vec_lump.
+OutputMonitor controls the frequency of writing the .dat file which contains the control variables. It also computes the lumped mass matrix vector which is substitued to `ts->vec_lump`.
 
+To change the frequency of printing the output files change the following in the OutputMonitor() function
+
+```c hl_lines="1"
+  PetscInt fac = 2.0/user->dt;
+
+  if(step%fac==0)
+  { 
+    // PRINTING OUTPUT FILES
+	  sprintf(filename,"./heat%d.dat",step); 
+	  ierr = IGAWriteVec(iga,U,filename);CHKERRQ(ierr);
+  }
+```
 
 ### 4.4  Geometry an boundary setup
 
@@ -162,14 +173,14 @@ OutputMonitor controls the frequency of writing the .dat file which contains the
 
 ## 5 · Build instructions
 
-1. Copy the files into the **`demo/heat/`** folder of your PetIGA clone (or any folder in `$PETIGA_DIR/demo`):
+Copy the files into the **`demo/heat/`** folder of your PetIGA clone (or any folder in `$PETIGA_DIR/demo`):
 
    ```bash
-        cp r heat2d  $PETIGA_DIR/demo/
+        cp -r heat2d  $PETIGA_DIR/demo/
         cd $PETIGA_DIR/demo/heat2d
    ```
 
-2. Compile:
+Compile:
 
     ```bash
         make heat2D
@@ -195,68 +206,62 @@ Edit `run_heat2d.sh` to suit your cluster queue (Slurm, PBS, etc)
 
 
     # Run the main program
-    mpirun -np 128 ./heat2D > "${SLURM_JOB_NAME}.o$id"
+    mpirun -np 128 ./heat2D -N 100 -dt 5e-4 -total_time 100.0 > "${SLURM_JOB_NAME}.o$id"
 ```
 
 
 
-## 7 · Results & visualisation *(placeholder)*
+## 7 · Results & visualisation 
 
 **Expected output files**
 
-* `heat2d0000.dat`, `heat2d0100.dat`, … (PetIGA binary snapshots)  
-* Energy / time monitor printed to **stdout**
+* `heat0.dat`, `heat4000.dat`, … (PetIGA solution binary snapshots)  
+* `lump.dat` file containing the lumped mass matrix vector
+* `igaphase.dat` file containing IGA metadata necessary for postprocessing
 
+
+**Convert `.dat` files to VTK for ParaView**
 ```python
-from igakit.io  import PetIGA
-from igakit.plot import plt
-
-# load snapshot number 5000 (edit as needed)
-xyz, T = PetIGA().read("heat2d0500.dat")
-
-plt.contourf(xyz, T)   # filled contour of temperature
-plt.colorbar(label="Temperature")
-plt.title("2‑D Heat‑Conduction – step 5000")
-plt.show()
+from igakit.io import PetIGA,VTK
+from numpy import linspace
+import glob
+from multiprocessing import Pool
+import time
+	
+# read in discretization info and potentially geometry
+nrb = PetIGA().read("igaphase.dat")
+	
+# enter the refinement factor
+refinement = 2
+	
+# write a function to sample the nrbs object
+uniform = lambda U: linspace(U[0], U[-1], int(len(U)*refinement))
+	
+# function to print the fields into VTK files
+def print_file(infile):
+	sol = PetIGA().read_vec(infile,nrb)
+	outfile = infile.split(".")[0] + ".vtk"
+	VTK().write(outfile,       # output filename
+		nrb,                    # igakit NURBS object
+		fields=sol,             # sol is the numpy array to plot
+		scalars={'T':0})
+	
+if __name__ == '__main__':
+	list_of_files = glob.glob("heat*.dat")
+	t0 = time.time()
+	p = Pool(24)
+	p.map(print_file, list_of_files)
+	t1 = time.time()
+	print('Total post-processing time = %f secs'%(t1 - t0))
 ```
+Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature field.
 
 
 
+(Placeholder to add the results!!)
 
 
 
-
-
-
-#### With a title
-
-``` py title="bubble_sort.py"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-#### With line numbers
-
-``` py linenums="1"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-#### Highlighting lines
-
-``` py hl_lines="2 3"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
 
 ## Icons and Emojs
 

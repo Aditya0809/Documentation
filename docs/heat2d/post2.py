@@ -8,7 +8,7 @@ import time
 nrb = PetIGA().read("igaphase.dat")
 	
 	# enter the refinement factor
-refinement = 1
+refinement = 2
 	
 	# write a function to sample the nrbs object
 uniform = lambda U: linspace(U[0], U[-1], int(len(U)*refinement))
