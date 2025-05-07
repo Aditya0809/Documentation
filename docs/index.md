@@ -27,7 +27,7 @@
 
 
 
-## What you’ll find in this documentation
+## Overview
 
 1. **Installation guide** - install and compile the modified PetIGA and Petsc
 1. **Quick‑start tutorials** – running your first 2‑D heat conduction example.  
@@ -35,5 +35,11 @@
 4. **Scaling tips** – how to push your model to hundreds of millions of DOFs.  
 5. **Reference pages** – installation flags, command‑line options, and helper scripts.
 
-Whether you are a graduate student prototyping a new constitutive law or an engineer scaling to thousands of cores, this guide will get you productive with PetIGA and PETSc.
+This guide will get you productive with explicit PetIGA and PETSc.
 
+
+## References
+
+1. [Paspunurwar, A., Moure, A. & Gomez, H. Dynamic cluster field modeling of collective chemotaxis. Sci Rep 14, 25162 (2024). https://doi.org/10.1038/s41598-024-75653-1](https://www.nature.com/articles/s41598-024-75653-1#Sec2)
+
+2. [Paspunurwar, A.S., Gomez, H. Decoding complex transport patterns in flow-induced autologous chemotaxis of multicellular systems. Biomech Model Mechanobiol 24, 197–212 (2025). https://doi.org/10.1007/s10237-024-01905-8](https://link.springer.com/article/10.1007/s10237-024-01905-8)

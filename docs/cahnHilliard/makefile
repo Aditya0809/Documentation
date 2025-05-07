@@ -1,5 +1,6 @@
 TARGETS = \
-CahnHilliard2D 
+ch2d_implicit \
+ch2d_explicit \ 
 
 ALL: $(TARGETS)
 clean::
@@ -20,7 +21,10 @@ include $(PETIGA_DIR)/lib/petiga/conf/variables
 include $(PETIGA_DIR)/lib/petiga/conf/rules
 
 
-CahnHilliard2D: CahnHilliard2D.o
+ch2d_implicit: ch2d_implicit.o
+	$(CLINKER) -o $@ $< $(PETIGA_LIB)
+	$(RM) -f $<
+ch2d_explicit: ch2d_explicit.o
 	$(CLINKER) -o $@ $< $(PETIGA_LIB)
 	$(RM) -f $<
 

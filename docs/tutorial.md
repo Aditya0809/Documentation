@@ -40,7 +40,7 @@ T(\mathbf x,0)=T_\text{init}(\mathbf x).
 
 Because we prescribe periodicity, there is no Dirichlet (\(\Gamma_D\)) or Neumann (\(\Gamma_N\)) boundary—the domain wraps onto itself.
 
-**You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.**
+> You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.
 ---
 
 ## 3 · Get the demo codes from  [heat2d](files/heat2d.zip)

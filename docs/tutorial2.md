@@ -1,13 +1,11 @@
 # Tutorial II · 2‑D Cahn Hilliard Equation
-*(explicit **vs** implicit PetIGA implementations)*
 
 
 In this example we focus on:
 
-1. The mathematical model (strong form)  
-2. How the **Residual** and **Tangent** functions differ between explicit and implicit time stepping  
-3. Minimal IGA setup common to both variants  
-4. Place-holders for running, post-processing, and comparing results
+1. How the **Residual** and **Tangent** functions differ between explicit and implicit time stepping  
+2. Minimal IGA setup common to both variants  
+3. Comparing results
 
 
 ## 1 · Problem description 
@@ -18,7 +16,6 @@ In this example we focus on:
 * Mobility \(M(c)=c(1-c)\)  
 * Random initial condition with mean \( \bar c = 0.63\)
 
-*(Feel free to expand.)*
 
 ---
 
@@ -55,11 +52,13 @@ Boundary conditions are **periodic**; source term \(q=0\).
 
 ## 3 · Code structure overview
 
+Download the codes from [cahnHiliard](files/cahnHilliard.zip)
+
 | File | Purpose |
 |------|---------|
 | `ch2d_explicit.c` | explicit Euler (`TSEULER`) – **Residual only** |
 | `ch2d_implicit.c` | implicit (`TSALPHA`, or `TSTheta`) – **Residual + Tangent** |
-| `run_ch2d.sh` | batch script template |
+| `run.sh` | batch script template |
 
 > We show only the parts that differ between the two builds—everything else (domain, axis settings, initial condition, monitors) is shared.
 
@@ -120,3 +119,149 @@ No Jacobian is registered; the driver simply calls
     IGACreateTS3(iga,&ts);      /* attaches RHS only          */
     TSSetType(ts, TSEULER);     /* forward Euler time stepper */
 ```
+
+
+### 3.2 Implicit variant – Residual and Tangent
+
+The only difference in the residual is the function call and addition of time derivative term in the weak form
+
+```c hl_lines="2"
+PetscErrorCode Residual(IGAPoint p,
+                        PetscReal shift,const PetscScalar *V,
+                        PetscReal t,const PetscScalar *U,
+                        PetscScalar *R,void *ctx)
+```
+
+
+```c hl_lines="9 10"
+    for (a=0; a<nen; a++) {
+    PetscReal Na    = N0[a];
+    PetscReal Na_x  = N1[a][0];
+    PetscReal Na_y  = N1[a][1];
+    PetscReal Na_xx = N2[a][0][0];
+    PetscReal Na_yy = N2[a][1][1];
+    /* ----- */
+    PetscScalar Ra  = 0;
+    // Na * c_t
+    Ra += Na * c_t;
+    // grad(Na) . ((M*dmu + dM*del2(c))) grad(C)
+    Ra += (Na_x * c_x + Na_y * c_y) * t1;
+    // del2(Na) * M * del2(c)
+    Ra += (Na_xx+Na_yy) * M * del2_c;
+    /* ----- */
+    R[a] = Ra;
+  }
+```
+
+Add the Jacobian kernel:
+
+```c
+PetscErrorCode Tangent(IGAPoint p,
+                       PetscReal shift,const PetscScalar *V,
+                       PetscReal t,const PetscScalar *U,
+                       PetscScalar *K,void *ctx)
+{
+   /* identical preamble to Residual(): compute c, ∇c, mobility, etc. */
+  /* ... */
+
+
+  const PetscReal (*N0)       = (typeof(N0)) p->shape[0];
+  const PetscReal (*N1)[2]    = (typeof(N1)) p->shape[1];
+  const PetscReal (*N2)[2][2] = (typeof(N2)) p->shape[2];
+
+  PetscInt a,b;
+  for (a=0; a<nen; a++) {
+    PetscReal Na    = N0[a];
+    PetscReal Na_x  = N1[a][0];
+    PetscReal Na_y  = N1[a][1];
+    PetscReal Na_xx = N2[a][0][0];
+    PetscReal Na_yy = N2[a][1][1];
+    PetscReal del2_Na = Na_xx+Na_yy;
+    for (b=0; b<nen; b++) {
+      PetscReal Nb    = N0[b];
+      PetscReal Nb_x  = N1[b][0];
+      PetscReal Nb_y  = N1[b][1];
+      PetscReal Nb_xx = N2[b][0][0];
+      PetscReal Nb_yy = N2[b][1][1];
+      PetscReal del2_Nb = Nb_xx+Nb_yy;
+      /* ----- */
+      PetscScalar Kab = 0;
+      // shift*Na*Nb
+      Kab += shift*Na*Nb;
+      // grad(Na) . (M*dmu+dM*del2(c)) grad(Nb)
+      Kab += (Na_x * Nb_x + Na_y * Nb_y) * t1;
+      // grad(Na) . ((dM*dmu+M*d2mu+d2M*del2(c))*Nb + dM*del2(Nb)) grad(C)
+      PetscScalar t3 = t2*Nb + dM*del2_Nb;
+      Kab += (Na_x * c_x + Na_y * c_y) * t3;
+      // del2(Na) * ((dM*del2(c)*Nb + M*del2(Nb))
+      Kab += del2_Na * (dM*del2_c*Nb + M*del2_Nb);
+      /* ----- */
+      K[a*nen+b] = Kab;
+    }
+  }
+  return 0;
+}
+
+```
+
+
+and register:
+
+
+```c
+    IGASetFormRHSFunction(iga, Residual, &user);
+    IGASetFormIJacobian (iga, Tangent,  &user);
+
+    TSSetType(ts, TSALPHA);          /* implicit, unconditionally stable */
+    TSAlphaSetRadius(ts, 0.5);       /* parameters as desired            */
+
+```
+
+### 3.3 Common IGA setup (shared)
+
+```c
+    IGACreate(PETSC_COMM_WORLD,&iga);
+    IGASetDim(iga,2);       /* 2-D */
+    IGASetDof(iga,1);       /* scalar field c */
+    IGAAxisSetPeriodic(axis0,PETSC_TRUE);
+    IGAAxisInitUniform(axis0, N, 0.0, 1.0, k);
+    IGAAxisCopy(axis0, axis1);           /* copy settings to Y */
+    IGASetUp(iga);
+```
+
+
+## 4 · Running and compiling the codes
+
+* Compilation – same `make` targets: `make ch2d_explicit`, `make ch2d_implicit`
+
+* Run scripts – `sbatch run.sh`
+
+* Metrics – compare free-energy decay, mass conservation, and wall-clock time.
+
+* Visualisation – convert `ch2dXXXX.dat` to VTK exactly as in Tutorial I, `post2.py` also provided in the download folder
+
+
+
+## 5 · Results and visualization
+
+### 5.1 What to expect physically 📈
+
+| Observable | Explicit / implicit outcome |
+|------------|-----------------------------|
+| **Total mass** \( \displaystyle \int_\Omega c \,d\Omega \) | Conserved to machine precision (both schemes). |
+| **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta|\nabla c|^{2}\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
+| **Spinodal decomposition** | Initial random field separates into two nearly-pure phases (\(c\!\approx\!0\) and \(c\!\approx\!1\)) connected by thin interfaces.  Droplets coarsen via Ostwald ripening until one domain percolates. |
+
+> **Analytic check:** In the long-time limit the system minimises \(\mathcal F\) subject to mass conservation, so the equilibrium is two constant states \(c = c_-\) and \(c = c_+\) separated by an interface of width \(\sqrt{\alpha}\).  
+> Energy curves from both solvers should approach the same asymptote, though the implicit run reaches it in far fewer steps.
+
+
+Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
+
+1. Early time – fine “salt-and-pepper” mixture of red/blue.
+
+2. Intermediate – domains elongate and coarsen.
+
+3. Late time – two bulk regions separated by a smooth interface whose thickness matches \( \sqrt(\alpha) \).
+​
+
