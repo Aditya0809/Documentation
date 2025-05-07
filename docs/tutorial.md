@@ -1,39 +1,46 @@
 # Tutorial I · 2‑D Heat‑Conduction Example
 
-**Objective** – show both an *implicit* and an *explicit* PetIGA implementation for the transient heat‑diffusion equation and how to run them on your cluster.
+**Objective** – show an *explicit* PetIGA implementation for the transient heat‑diffusion equation and how to run it on your cluster.
 
 ---
+## 1 · Problem description
 
-## 1 · Problem description  *(placeholder)*
-
-Briefly describe the physical setup:  
-* domain geometry (e.g. unit square, periodic boundaries on `x`, insulated on `y`).  
-* initial temperature distribution.  
-* material parameters (*κ*, density ρ, specific heat *c_p*).
-
-*(Fill in your own description here.)*
+| Item | Value / comment |
+|------|-----------------|
+| **Domain** | 2‑D square, side length \(L = 50\). |
+| **Boundary conditions** | *Periodic* on all four edges (model a repeating tile). |
+| **Initial temperature** | Parabolic “hot spot” centred at \((L/2,L/2)\):<br> \(T(\mathbf x,0)=100\Bigl[\,1-\bigl(\tfrac{r}{0.5L\sqrt{2}}\bigr)^2\Bigr]\) where \(r=\|\mathbf x-\mathbf x_c\|\) and values below 0 are clipped. |
+| **Material property** | Thermal diffusivity \( \alpha = \dfrac{\kappa}{\rho c_p}=5.0 \). |
+| **Discretisation** |  \(\Delta x = 0.5\) ⇒ \(100\times100\) elements; time step \(\Delta t = 5\times10^{-4}\). |
+| **Heat source** | None (\(q=0\)). |
 
 ---
 
 ## 2 · Strong form
 
-The transient heat equation in Ω ⊂ ℝ²:
+Find \(T(\mathbf x,t)\) such that
 
 \[
-\rho c_p \frac{\partial T}{\partial t} - \kappa\nabla^{2}T = q
-\quad\text{in } \Omega,\; t>0
+\rho\,c_p\;\frac{\partial T}{\partial t} - \kappa\nabla^{2}T = 0
+\quad \text{in}\; \Omega=[0,L]^2,\; t>0
 \]
 
-Boundary & initial conditions *(edit as needed)*:
+with **periodic boundaries**
 
 \[
-T = T_0 \text{ on } \Gamma_D, 
-\quad
--\kappa\nabla T\!\cdot\!\mathbf n = 0 \text{ on } \Gamma_N,
-\quad
-T(\mathbf x,0)=T_\mathrm{init}(\mathbf x).
+T(0,y,t)=T(L,y,t), \qquad 
+T(x,0,t)=T(x,L,t),
 \]
 
+and initial condition
+
+\[
+T(\mathbf x,0)=T_\text{init}(\mathbf x).
+\]
+
+Because we prescribe periodicity, there is no Dirichlet (\(\Gamma_D\)) or Neumann (\(\Gamma_N\)) boundary—the domain wraps onto itself.
+
+*(You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.)*
 ---
 
 ## 3 · Get the demo codes
