@@ -138,7 +138,9 @@ The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delt
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
 \[ 
 \mathcal{M}_{AB} = \sum_{b=1}^{n_b} M_{Ab} \& \text{if} A = B
-\mathcal{M}_{AB} = 0 \& \text{if } A \neq B 
+\]
+\[
+\mathcal{M}_{AB} = 0 \& \text{if} A \neq B 
 \]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.

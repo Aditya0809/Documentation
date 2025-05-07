@@ -40,66 +40,167 @@ T(\mathbf x,0)=T_\text{init}(\mathbf x).
 
 Because we prescribe periodicity, there is no Dirichlet (\(\Gamma_D\)) or Neumann (\(\Gamma_N\)) boundary—the domain wraps onto itself.
 
-*(You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.)*
+*You can adjust \(L,\;\alpha,\;\Delta x,\;\Delta t\) via command‑line flags when running the example.*
 ---
 
-## 3 · Get the demo codes
+## 3 · Get the demo codes from  [heat2d](files/heat2d.zip)
 
-| Variant | Download link |
-|---------|---------------|
-| **Implicit PetIGA solver** | [heat2d\_implicit.c](files/heat2d_implicit.c) |
-| **Explicit PetIGA solver** | [heat2d\_explicit.c](files/heat2d_explicit.c) |
-| **Sample `run.sh` script** | [run\_heat2d.sh](files/run_heat2d.sh) |
-
-*(Replace the links with actual files in `docs/files/`.)*
+This folder contains heat2D.c file, a makefile, a post processing file named post2.py and a batch script for running in the cluster
 
 ---
 
-## 4 · Build instructions
+## 4 · Quick insights into the code 
+
+### 4.1 Residual assemly
+
+The **Residual()** callback implements the weak form after multiplying the PDE by a test function, integrating by parts, and inserting the B‑spline shape functions.  
+For heat conduction the residual per basis function \(N_a\) is  
+
+\[
+R_a = -\alpha \, \nabla N_a \!\cdot\! \nabla T ,
+\]
+
+coded as:
+
+
+```c
+PetscErrorCode Residual(IGAPoint pnt,
+                        PetscReal t,const PetscScalar *U,
+                        PetscScalar *Re,void *ctx)
+{
+
+	AppCtx *user = (AppCtx *)ctx;
+  PetscScalar sol; 
+  PetscScalar grad[2];
+  IGAPointFormValue(pnt,U,&sol);
+  IGAPointFormGrad (pnt,U,&grad[0]);
+  PetscReal alpha = user->alpha;	
+ 
+
+  const PetscReal *N0,(*N1)[2];
+  IGAPointGetShapeFuns(pnt,0,(const PetscReal**)&N0);
+  IGAPointGetShapeFuns(pnt,1,(const PetscReal**)&N1);
+
+  PetscScalar (*Ra)[1] = (PetscScalar (*)[1])Re;
+  PetscInt a,nen = pnt->nen;
+  for (a=0; a<nen; a++) { Ra[a][0] = -alpha*(N1[a][0]*grad[0] + N1[a][1]*grad[1]); }	
+
+  return 0;
+}
+```
+
+### 4.2  Initial condition
+
+Modify the hotspot profile in FormInitialCondition():
+```c
+    T = 100.0*(1-(dist/(0.5*user->Lx*1.414))*(dist/(0.5*user->Lx*1.414)));
+```
+
+### 4.3  Output Monitor
+
+OutputMonitor controls the frequency of writing the .dat file which contains the control variables. It also computes the lumped mass matrix vector which is substitued to ts->vec_lump.
+
+
+### 4.4  Geometry an boundary setup
+
+```c
+  IGA iga;
+  ierr = IGACreate(PETSC_COMM_WORLD,&iga);CHKERRQ(ierr);
+  ierr = IGASetDim(iga,2);CHKERRQ(ierr);
+  ierr = IGASetDof(iga,1);CHKERRQ(ierr);
+
+  // setting boundary conditions
+  IGAAxis axis0;
+  ierr = IGAGetAxis(iga,0,&axis0);CHKERRQ(ierr);
+  ierr = IGAAxisSetPeriodic(axis0,PETSC_TRUE);CHKERRQ(ierr);
+  ierr = IGAAxisSetDegree(axis0,p);CHKERRQ(ierr);
+  ierr = IGAAxisInitUniform(axis0,user.Nx,0.0,user.Lx,k);CHKERRQ(ierr);
+  IGAAxis axis1;
+  ierr = IGAGetAxis(iga,1,&axis1);CHKERRQ(ierr);
+  ierr = IGAAxisCopy(axis0,axis1);CHKERRQ(ierr);
+  ierr = IGAAxisSetPeriodic(axis1,PETSC_TRUE);CHKERRQ(ierr);
+
+  ierr = IGASetFromOptions(iga);CHKERRQ(ierr);
+  ierr = IGASetUp(iga);CHKERRQ(ierr);
+```
+
+
+### 4.5  Time-stepping driver (explicit Euler)
+
+```c
+  /* RHS only */
+  ierr = IGASetFormRHSFunction(iga, Residual, &user);CHKERRQ(ierr);
+
+  /* lumped mass vector placeholder */
+  ierr = IGACreateVec(iga,&user.lump);
+  ierr = VecSet(user.lump,1.0);
+
+  /* create explicit TS object */
+  TS ts;
+  ierr = IGACreateTS3(iga,&ts);CHKERRQ(ierr);
+  ierr = TSSetProblemType(ts, TS_LINEAR);
+  ierr = TSSetMaxTime(ts,user.total_time);CHKERRQ(ierr);
+  ierr = TSSetTimeStep(ts,user.dt);CHKERRQ(ierr);
+  ierr = TSSetExactFinalTime(ts,TS_EXACTFINALTIME_MATCHSTEP);CHKERRQ(ierr);
+  ierr = TSSetType(ts,TSEULER);CHKERRQ(ierr);
+
+
+  /* output monitor */ 
+  if (output)  {ierr = TSMonitorSet(ts,OutputMonitor,&user,NULL);CHKERRQ(ierr);}
+  ierr = TSSetFromOptions(ts);CHKERRQ(ierr);
+
+  /* initial condition and solve */
+  Vec C;
+  ierr = TSGetSolution(ts,&C);CHKERRQ(ierr);
+  ierr = FormInitialCondition(iga,C,&user);CHKERRQ(ierr);
+  ierr = TSSolve(ts,C);CHKERRQ(ierr);
+
+```
+  
+
+---
+
+## 5 · Build instructions
 
 1. Copy the files into the **`demo/heat/`** folder of your PetIGA clone (or any folder in `$PETIGA_DIR/demo`):
 
    ```bash
-        cp heat2d_*.c  $PETIGA_DIR/demo/heat/
-        cp run_heat2d.sh $PETIGA_DIR/demo/heat/
-        cd $PETIGA_DIR/demo/heat
+        cp r heat2d  $PETIGA_DIR/demo/
+        cd $PETIGA_DIR/demo/heat2d
    ```
 
 2. Compile:
 
     ```bash
-        # Pick one; or build both
-        make heat2d_implicit
-        make heat2d_explicit
+        make heat2D
     ```
 
-## 5 . Running the solver
+## 6 . Running the solver
 
-Edit `run_heat2d.sh` to uit your cluster queue (Slurm, PBS, etc)
+Edit `run_heat2d.sh` to suit your cluster queue (Slurm, PBS, etc)
 
-Key options you migh change:
 
-| Option        | Meaning                                 | Default |
-|---------------|-----------------------------------------|---------|
-| `-N`          | number of elements per side             | 32      |
-| `-p`          | polynomial degree                       | 2       |
-| `-ts_type`    | time‑stepping scheme (`euler`, `rk3`, `theta`, …) | `euler` (explicit build) |
-| `-ts_dt`      | time step                               | 1e‑4    |
-| `-ts_max_time`| final simulation time                   | 0.5     |
-
-**Example run on 4 MPI ranks**
+**Example run on 128 MPI ranks**
 
 ```bash
-mpirun -np 4 ./heat2d_explicit \
-       -N 64          \
-       -ts_dt 2e-4    \
-       -ts_max_time 1.0
-# add extra flags if needed, e.g. -iga_view or solver tolerances
+    #!/bin/bash
+
+    #SBATCH -t 04:00:00
+    #SBATCH -n 128
+    #SBATCH -o "%x.o%j"
+    #SBATCH -e "%x.e%j"
+    #SBATCH --job-name="heat2D"
+    #SBATCH --mem-per-cpu=1G
+    #SBATCH -p RM
+
+
+    # Run the main program
+    mpirun -np 128 ./heat2D > "${SLURM_JOB_NAME}.o$id"
 ```
 
 
 
-## 6 · Results & visualisation *(placeholder)*
+## 7 · Results & visualisation *(placeholder)*
 
 **Expected output files**
 
