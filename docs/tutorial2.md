@@ -257,7 +257,7 @@ and register:
 
 Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
 
-1. Early time – fine “salt-and-pepper” mixture of red/blue.
+1. Early time – fine “salt-and-pepper” mixture of red/yellow.
 
 2. Intermediate – domains elongate and coarsen.
 
@@ -268,7 +268,7 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
   ![Phase separation: implicit (top) vs explicit (bottom)](files/ch2d.png){width = "300"}
   <figcaption>
     <strong>Figure&nbsp;2 – 2-D Cahn–Hilliard: implicit&nbsp;vs explicit.</strong><br>
-    <em>Top row</em> – implicit scheme snapshots at&nbsp;t₀, t₁, t₂.<br>
+    <em>Top row</em> – implicit scheme snapshots at increasing times.<br>
     <em>Bottom row</em> – explicit scheme at the same times.<br>
     Both solvers conserve mass and lower the Ginzburg–Landau free energy; interfaces sharpen and coarsen until two bulk phases remain.  
   </figcaption>
