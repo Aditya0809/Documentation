@@ -262,15 +262,12 @@ Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature
 
 
 
-![diagram](files/heat2d.svg)
 
-![diagram](files/heat2d.png)
 
-![diagram](files/heat2d.jpg)
+![diagram](files/heat2d.jpg){ width = 300}
 
 
 <figure style="text-align:center">
-  <img src="files/heat2d.jpg" alt="Temperature snapshots">
   <figcaption>
     <strong>Figure&nbsp;1 –</strong>
     Numerical solution of the 2-D heat-conduction problem.<br>
