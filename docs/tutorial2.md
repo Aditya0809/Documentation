@@ -249,7 +249,7 @@ and register:
 | Observable | Explicit / implicit outcome |
 |------------|-----------------------------|
 | **Total mass** \( \displaystyle \int_\Omega c \,d\Omega \) | Conserved to machine precision (both schemes). |
-| **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta|\nabla c|^{2}\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
+| **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta\abs{\nabla c}^{2}\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
 | **Spinodal decomposition** | Initial random field separates into two nearly-pure phases (\(c\!\approx\!0\) and \(c\!\approx\!1\)) connected by thin interfaces.  Droplets coarsen via Ostwald ripening until one domain percolates. |
 
 > **Analytic check:** In the long-time limit the system minimises \(\mathcal F\) subject to mass conservation, so the equilibrium is two constant states \(c = c_-\) and \(c = c_+\) separated by an interface of width \(\sqrt{\alpha}\).  

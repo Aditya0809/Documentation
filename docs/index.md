@@ -32,7 +32,7 @@
 1. **Installation guide** - install and compile the modified PetIGA and Petsc
 1. **Quick‑start tutorials** – running your first 2‑D heat conduction example.  
 3. **Worked examples** in fourth-order Cahn Hilliard equation.  
-4. **Scaling tips** – how to push your model to hundreds of millions of DOFs.  
+4. **Scaling tips** – how to push your model to hundreds of millions of DOFs (check References).  
 5. **Reference pages** – installation flags, command‑line options, and helper scripts.
 
 This guide will get you productive with explicit PetIGA and PETSc.
