@@ -137,23 +137,23 @@ However, this ignores the presence of the **mass matrix**, which should appear i
 The proper discretized formulation is: \\[ M \cdot U^{n+1} = M \cdot U^n + \Delta t \cdot \mathcal{R}(U^n) \\] 
 To avoid the cost of inverting \\( M \\), we apply the **lumped mass matrix** technique, where: 
 
-\[
+\\[
 \mathcal{M}_{AB} = 0 \& \text{if} A \neq B 
-\]
+\\]
 This converts the system into a diagonal form, allowing for efficient inversion: \\[ U^{n+1} = U^n + \Delta t \cdot \mathcal{M}^{-1} \mathcal{R}(U^n) \\] 
 This modification improves performance in explicit schemes while maintaining physical correctness.
 
-\[
+\\[
     \mathcal{M}_{AB}=\begin{cases}
           \sum_{b=1}^{n_b} {M}_{Ab} \: & \text{if} \; A=B, \\
           0 \: & \text{if} \; A\neq B. \ 
      \end{cases}
-]
+\\]
 
 
-\[ 
+\\[ 
  \mathcal{M}_{AB} = \sum_{b=1}^{n_b} {M}_{Ab} \: \text{if} \; A=B
-\]
+\\]
 
 ### Extra note on the **explicit RHS helper**
 

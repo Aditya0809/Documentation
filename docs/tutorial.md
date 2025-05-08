@@ -20,23 +20,23 @@
 
   Find \(T(\mathbf x,t)\) such that
 
-  \[
+  \\[
   \rho\,c_p\;\frac{\partial T}{\partial t} - \kappa\nabla^{2}T = 0
   \quad \text{in}\; \Omega=[0,L]^2,\; t>0
-  \]
+  \\]
 
   with **periodic boundaries**
 
-  \[
+  \\[
   T(0,y,t)=T(L,y,t), \qquad 
   T(x,0,t)=T(x,L,t),
-  \]
+  \\]
 
   and initial condition
 
-  \[
-  T(\mathbf x,0)=T_\text{init}(\mathbf x).
-  \]
+\[
+T(\mathbf x,0)=T_\text{init}(\mathbf x).
+\]
 
   Because we prescribe periodicity, there is no Dirichlet (\(\Gamma_D\)) or Neumann (\(\Gamma_N\)) boundary—the domain wraps onto itself.
 
