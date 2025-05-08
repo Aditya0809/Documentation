@@ -244,7 +244,7 @@ and register:
 
 ## 5 · Results and visualization
 
-### 5.1 What to expect physically 📈
+### 5.1 What to expect physically
 
 | Observable | Explicit / implicit outcome |
 |------------|-----------------------------|
@@ -252,8 +252,7 @@ and register:
 | **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta\nabla c\cdot\nabla c\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
 | **Spinodal decomposition** | Initial random field separates into two nearly-pure phases (\(c\!\approx\!0\) and \(c\!\approx\!1\)) connected by thin interfaces.  Droplets coarsen via Ostwald ripening until one domain percolates. |
 
-> **Analytic check:** In the long-time limit the system minimises \(\mathcal F\) subject to mass conservation, so the equilibrium is two constant states \(c = c_-\) and \(c = c_+\) separated by an interface of width \(\sqrt{\alpha}\).  
-> Energy curves from both solvers should approach the same asymptote, though the implicit run reaches it in far fewer steps.
+
 
 
 Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
@@ -262,11 +261,11 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
 
 2. Intermediate – domains elongate and coarsen.
 
-3. Late time – two bulk regions separated by a smooth interface whose thickness matches \( \sqrt(\alpha) \).
+3. Late time – two bulk regions separated by a smooth interface.
 ​
 
-<figure style="text-align:center">
-  <img src="files/ch2d.png" alt="Phase separation: implicit (top) vs explicit (bottom)">
+<figure markdown="span">
+  ![Phase separation: implicit (top) vs explicit (bottom)](files/ch2d.png){width = "300"}
   <figcaption>
     <strong>Figure&nbsp;2 – 2-D Cahn–Hilliard: implicit&nbsp;vs explicit.</strong><br>
     <em>Top row</em> – implicit scheme snapshots at&nbsp;t₀, t₁, t₂.<br>
