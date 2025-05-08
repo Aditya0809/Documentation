@@ -259,6 +259,7 @@ if __name__ == '__main__':
 Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature field.
 
 
+![diagram](files/heat2d.jpg)
 
 <figure style="text-align:center">
   <img src="files/heat2d.jpg" alt="Temperature snapshots">
