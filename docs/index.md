@@ -11,7 +11,7 @@
 | **Low memory footprint** | No global matrix inversion; ideal when the number of degrees of freedom (DOFs) is very large. |
 | **No Jacobian required** | Saves coding effort and sidesteps numerical differentiation costs. |
 | **Embarrassingly parallel** | Each time step is mostly local, giving excellent scalability. |
-| **Simple to implement** | Update rule is a vector operation; easier for newcomers. |
+| **Simple to implement** | Update rule is a vector operation; easy to understand. |
 
 > **Caveat:** stability is dictated by a CFL‑type time‐step limit.
 

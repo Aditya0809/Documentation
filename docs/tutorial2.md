@@ -265,8 +265,7 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
 ​
 
 
-![Phase separation: implicit (top) vs explicit (bottom)](files/ch2d.jpg){width=300}
-
+![figure](files/ch2d.jpg)
 <figure style="text-align:center">
   <figcaption>
     <strong>Figure&nbsp;2 – 2-D Cahn–Hilliard phase separation: implicit&nbsp;vs explicit.</strong><br>

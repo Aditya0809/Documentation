@@ -264,8 +264,7 @@ Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature
 
 
 
-![diagram](files/heat2d.jpg){ width = 300}
-
+![diagram](files/heat2d.jpg)
 
 <figure style="text-align:center">
   <figcaption>
