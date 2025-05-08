@@ -227,9 +227,9 @@ In this documentation we will use IGAKit mainly to **visualise simulation output
 
 **Installation tip:** IGAKit is pure‑Python. Activate your conda environment on Bridges2 and run  
 ```bash
-     pip install --user igakit
+     pip install https://github.com/dalcinl/igakit/archive/refs/heads/master.zip
 ```  
 or clone the repo and install manually:  
 ```bash
-     python setup.py install --user
+     git clone https://github.com/dalcinl/igakit
 ```
