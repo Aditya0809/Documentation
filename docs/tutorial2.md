@@ -249,7 +249,7 @@ and register:
 | Observable | Explicit / implicit outcome |
 |------------|-----------------------------|
 | **Total mass** \( \displaystyle \int_\Omega c \,d\Omega \) | Conserved to machine precision (both schemes). |
-| **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta\abs{\nabla c}^{2}\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
+| **Free energy** \( \displaystyle \mathcal F(t)=\int_\Omega \Psi(c)+\tfrac12\alpha\theta\left|\nabla c\right|^{2}\,d\Omega \) | Monotonically decreases → plateaus when the interface reaches equilibrium. |
 | **Spinodal decomposition** | Initial random field separates into two nearly-pure phases (\(c\!\approx\!0\) and \(c\!\approx\!1\)) connected by thin interfaces.  Droplets coarsen via Ostwald ripening until one domain percolates. |
 
 > **Analytic check:** In the long-time limit the system minimises \(\mathcal F\) subject to mass conservation, so the equilibrium is two constant states \(c = c_-\) and \(c = c_+\) separated by an interface of width \(\sqrt{\alpha}\).  
@@ -266,8 +266,7 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
 ​
 
 <figure style="text-align:center">
-  <img src="./files/ch2d.png"
-       alt="Phase separation: implicit (top) vs explicit (bottom)">
+  <img src="./files/ch2d.png" alt="Phase separation: implicit (top) vs explicit (bottom)">
   <figcaption>
     <strong>Figure&nbsp;2 – 2-D Cahn–Hilliard: implicit&nbsp;vs explicit.</strong><br>
     <em>Top row</em> – implicit scheme snapshots at&nbsp;t₀, t₁, t₂.<br>
@@ -275,3 +274,8 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
     Both solvers conserve mass and lower the Ginzburg–Landau free energy; interfaces sharpen and coarsen until two bulk phases remain.  
   </figcaption>
 </figure>
+
+
+## 6 · References
+
+1. [Gómez, H., Calo, V. M., Bazilevs, Y., & Hughes, T. J. (2008). Isogeometric analysis of the Cahn–Hilliard phase-field model. Computer methods in applied mechanics and engineering, 197(49-50), 4333-4352.](https://www.sciencedirect.com/science/article/pii/S0045782508001953)

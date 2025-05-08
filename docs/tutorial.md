@@ -270,15 +270,3 @@ Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature
     right → steady-state (<em>t</em> = 100s) where the field has relaxed to&nbsp;<em>T</em> ≈ 66.
   </figcaption>
 </figure>
-
-
-
-## Icons and Emojs
-
-:smile: 
-
-:fontawesome-regular-face-laugh-wink:
-
-:fontawesome-brands-twitter:{ .twitter }
-
-:octicons-heart-fill-24:{ .heart }
