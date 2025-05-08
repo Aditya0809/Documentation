@@ -1,0 +1,943 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for Explicit PetIGA">
+      
+      
+        <meta name="author" content="Aditya Paspunurwar">
+      
+      
+        <link rel="canonical" href="https://aditya0809.github.io/Documentation/tutorial/">
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../tutorial2/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Tutorial I · 2‑D Heat‑Conduction Example - Explicit PetIGA documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Tutorial I · 2‑D Heat‑Conduction Example - Explicit PetIGA documentation" >
+      
+        <meta  property="og:description"  content="Documentation for Explicit PetIGA" >
+      
+        <meta  property="og:image"  content="https://aditya0809.github.io/Documentation/assets/images/social/tutorial.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://aditya0809.github.io/Documentation/tutorial/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Tutorial I · 2‑D Heat‑Conduction Example - Explicit PetIGA documentation" >
+      
+        <meta  name="twitter:description"  content="Documentation for Explicit PetIGA" >
+      
+        <meta  name="twitter:image"  content="https://aditya0809.github.io/Documentation/assets/images/social/tutorial.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tutorial-i-2d-heatconduction-example" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Explicit PetIGA documentation" class="md-header__button md-logo" aria-label="Explicit PetIGA documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Explicit PetIGA documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tutorial I · 2‑D Heat‑Conduction Example
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Homepage
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Software Installation
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tutorial I · 2‑D Heat‑Conduction Example
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../tutorial2/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tutorial II · 2‑D Cahn Hilliard Equation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Explicit PetIGA documentation" class="md-nav__button md-logo" aria-label="Explicit PetIGA documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Explicit PetIGA documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Homepage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Software Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Tutorial I · 2‑D Heat‑Conduction Example
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorial I · 2‑D Heat‑Conduction Example
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-problem-description" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 · Problem description
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-strong-form" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 · Strong form
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-get-the-demo-codes-from-heat2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 · Get the demo codes from heat2d
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-quick-insights-into-the-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 · Quick insights into the code
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4 · Quick insights into the code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-residual-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 Residual assembly
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-initial-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Initial condition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-output-monitor" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Output Monitor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-geometry-an-boundary-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.4 Geometry an boundary setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-time-stepping-driver-explicit-euler" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.5 Time-stepping driver (explicit Euler)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-build-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 · Build instructions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-running-the-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      6 . Running the solver
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-results-visualisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      7 · Results &amp; visualisation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tutorial II · 2‑D Cahn Hilliard Equation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tutorial-i-2d-heatconduction-example">Tutorial I · 2‑D Heat‑Conduction Example</h1>
+<p><strong>Objective</strong> – show an <em>explicit</em> PetIGA implementation for the transient heat‑diffusion equation and how to run it on your cluster.</p>
+<hr />
+<h2 id="1-problem-description">1 · Problem description</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value / comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Domain</strong></td>
+<td>2‑D square, side length <span class="arithmatex">\(L = 50\)</span>.</td>
+</tr>
+<tr>
+<td><strong>Boundary conditions</strong></td>
+<td><em>Periodic</em> on all four edges (model a repeating tile).</td>
+</tr>
+<tr>
+<td><strong>Initial temperature</strong></td>
+<td>Parabolic “hot spot” centred at <span class="arithmatex">\((L/2,L/2)\)</span>:<br> <span class="arithmatex">\(T(\mathbf x,0)=100\Bigl[\,1-\bigl(\tfrac{r}{0.5L\sqrt{2}}\bigr)^2\Bigr]\)</span> where <span class="arithmatex">\(r=\|\mathbf x-\mathbf x_c\|\)</span> and values below 0 are clipped.</td>
+</tr>
+<tr>
+<td><strong>Material property</strong></td>
+<td>Thermal diffusivity <span class="arithmatex">\( \alpha = \dfrac{\kappa}{\rho c_p}=5.0 \)</span>.</td>
+</tr>
+<tr>
+<td><strong>Discretisation</strong></td>
+<td><span class="arithmatex">\(\Delta x = 0.5\)</span> ⇒ <span class="arithmatex">\(100\times100\)</span> elements; time step <span class="arithmatex">\(\Delta t = 5\times10^{-4}\)</span>.</td>
+</tr>
+<tr>
+<td><strong>Heat source</strong></td>
+<td>None (<span class="arithmatex">\(q=0\)</span>).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-strong-form">2 · Strong form</h2>
+<p>Find <span class="arithmatex">\(T(\mathbf x,t)\)</span> such that</p>
+<p>\[
+  \rho\,c_p\;\frac{\partial T}{\partial t} - \kappa\nabla^{2}T = 0
+  \quad \text{in}\; \Omega=[0,L]^2,\; t&gt;0
+  \]</p>
+<p>with <strong>periodic boundaries</strong></p>
+<p>\[
+  T(0,y,t)=T(L,y,t), \qquad 
+  T(x,0,t)=T(x,L,t),
+  \]</p>
+<p>and initial condition</p>
+<div class="arithmatex">\[
+T(\mathbf x,0)=T_\text{init}(\mathbf x).
+\]</div>
+<p>Because we prescribe periodicity, there is no Dirichlet (<span class="arithmatex">\(\Gamma_D\)</span>) or Neumann (<span class="arithmatex">\(\Gamma_N\)</span>) boundary—the domain wraps onto itself.</p>
+<blockquote>
+<p>You can adjust <span class="arithmatex">\(L,\;\alpha,\;\Delta x,\;\Delta t\)</span> via command‑line flags when running the example.</p>
+</blockquote>
+<hr />
+<h2 id="3-get-the-demo-codes-from-heat2d">3 · Get the demo codes from  <a href="../files/heat2d.zip">heat2d</a></h2>
+<p>This folder contains heat2D.c file, a makefile, a post processing file named post2.py and a batch script for running in the cluster</p>
+<hr />
+<h2 id="4-quick-insights-into-the-code">4 · Quick insights into the code</h2>
+<h3 id="41-residual-assembly">4.1 Residual assembly</h3>
+<p>The <strong>Residual()</strong> callback implements the weak form after multiplying the PDE by a test function, integrating by parts, and inserting the B‑spline shape functions. For heat conduction the residual per basis function <span class="arithmatex">\(N_a\)</span> is  </p>
+<div class="arithmatex">\[
+R_a = -\alpha \, \nabla N_a \!\cdot\! \nabla T ,
+\]</div>
+<p>coded as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">PetscErrorCode</span><span class="w"> </span><span class="nf">Residual</span><span class="p">(</span><span class="n">IGAPoint</span><span class="w"> </span><span class="n">pnt</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">                        </span><span class="n">PetscReal</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="k">const</span><span class="w"> </span><span class="n">PetscScalar</span><span class="w"> </span><span class="o">*</span><span class="n">U</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">                        </span><span class="n">PetscScalar</span><span class="w"> </span><span class="o">*</span><span class="n">Re</span><span class="p">,</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">AppCtx</span><span class="w"> </span><span class="o">*</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">AppCtx</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">ctx</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">PetscScalar</span><span class="w"> </span><span class="n">sol</span><span class="p">;</span><span class="w"> </span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="n">PetscScalar</span><span class="w"> </span><span class="n">grad</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="n">IGAPointFormValue</span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="o">&amp;</span><span class="n">sol</span><span class="p">);</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">IGAPointFormGrad</span><span class="w"> </span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="o">&amp;</span><span class="n">grad</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">PetscReal</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="o">-&gt;</span><span class="n">alpha</span><span class="p">;</span><span class="w">    </span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">PetscReal</span><span class="w"> </span><span class="o">*</span><span class="n">N0</span><span class="p">,(</span><span class="o">*</span><span class="n">N1</span><span class="p">)[</span><span class="mi">2</span><span class="p">];</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="n">IGAPointGetShapeFuns</span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span><span class="mi">0</span><span class="p">,(</span><span class="k">const</span><span class="w"> </span><span class="n">PetscReal</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">N0</span><span class="p">);</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="n">IGAPointGetShapeFuns</span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span><span class="mi">1</span><span class="p">,(</span><span class="k">const</span><span class="w"> </span><span class="n">PetscReal</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">N1</span><span class="p">);</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="n">PetscScalar</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">Ra</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">PetscScalar</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="n">Re</span><span class="p">;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="n">PetscInt</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">nen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pnt</span><span class="o">-&gt;</span><span class="n">nen</span><span class="p">;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">&lt;</span><span class="n">nen</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Ra</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">N1</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">grad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">N1</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"> </span><span class="p">}</span><span class="w">    </span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="42-initial-condition">4.2  Initial condition</h3>
+<p>Modify the temperature profile in FormInitialCondition():
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100.0</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">dist</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">user</span><span class="o">-&gt;</span><span class="n">Lx</span><span class="o">*</span><span class="mf">1.414</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">dist</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">user</span><span class="o">-&gt;</span><span class="n">Lx</span><span class="o">*</span><span class="mf">1.414</span><span class="p">)));</span>
+</code></pre></div></p>
+<h3 id="43-output-monitor">4.3  Output Monitor</h3>
+<p>OutputMonitor controls the frequency of writing the .dat file which contains the control variables. It also computes the lumped mass matrix vector which is substitued to <code>ts-&gt;vec_lump</code>.</p>
+<p>To change the frequency of printing the output files change the following in the OutputMonitor() function</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="hll"><span class="w">  </span><span class="n">PetscInt</span><span class="w"> </span><span class="n">fac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="o">/</span><span class="n">user</span><span class="o">-&gt;</span><span class="n">dt</span><span class="p">;</span>
+</span><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">step</span><span class="o">%</span><span class="n">fac</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p">{</span><span class="w"> </span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="c1">// PRINTING OUTPUT FILES</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="n">sprintf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&quot;./heat%d.dat&quot;</span><span class="p">,</span><span class="n">step</span><span class="p">);</span><span class="w"> </span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAWriteVec</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">filename</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">}</span>
+</code></pre></div>
+<h3 id="44-geometry-an-boundary-setup">4.4  Geometry an boundary setup</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">  </span><span class="n">IGA</span><span class="w"> </span><span class="n">iga</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGACreate</span><span class="p">(</span><span class="n">PETSC_COMM_WORLD</span><span class="p">,</span><span class="o">&amp;</span><span class="n">iga</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGASetDim</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGASetDof</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="c1">// setting boundary conditions</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="n">IGAAxis</span><span class="w"> </span><span class="n">axis0</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAGetAxis</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">axis0</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAAxisSetPeriodic</span><span class="p">(</span><span class="n">axis0</span><span class="p">,</span><span class="n">PETSC_TRUE</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAAxisSetDegree</span><span class="p">(</span><span class="n">axis0</span><span class="p">,</span><span class="n">p</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAAxisInitUniform</span><span class="p">(</span><span class="n">axis0</span><span class="p">,</span><span class="n">user</span><span class="p">.</span><span class="n">Nx</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="n">user</span><span class="p">.</span><span class="n">Lx</span><span class="p">,</span><span class="n">k</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="n">IGAAxis</span><span class="w"> </span><span class="n">axis1</span><span class="p">;</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAGetAxis</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">axis1</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAAxisCopy</span><span class="p">(</span><span class="n">axis0</span><span class="p">,</span><span class="n">axis1</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGAAxisSetPeriodic</span><span class="p">(</span><span class="n">axis1</span><span class="p">,</span><span class="n">PETSC_TRUE</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGASetFromOptions</span><span class="p">(</span><span class="n">iga</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGASetUp</span><span class="p">(</span><span class="n">iga</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="45-time-stepping-driver-explicit-euler">4.5  Time-stepping driver (explicit Euler)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">  </span><span class="cm">/* RHS only */</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGASetFormRHSFunction</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="w"> </span><span class="n">Residual</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">user</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="cm">/* lumped mass vector placeholder */</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGACreateVec</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="o">&amp;</span><span class="n">user</span><span class="p">.</span><span class="n">lump</span><span class="p">);</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecSet</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">lump</span><span class="p">,</span><span class="mf">1.0</span><span class="p">);</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="cm">/* create explicit TS object */</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="n">TS</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IGACreateTS3</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ts</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetProblemType</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">TS_LINEAR</span><span class="p">);</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetMaxTime</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">user</span><span class="p">.</span><span class="n">total_time</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetTimeStep</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">user</span><span class="p">.</span><span class="n">dt</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetExactFinalTime</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">TS_EXACTFINALTIME_MATCHSTEP</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetType</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">TSEULER</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span><span class="cm">/* output monitor */</span><span class="w"> </span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSMonitorSet</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">OutputMonitor</span><span class="p">,</span><span class="o">&amp;</span><span class="n">user</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);}</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSetFromOptions</span><span class="p">(</span><span class="n">ts</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">  </span><span class="cm">/* initial condition and solve */</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="n">Vec</span><span class="w"> </span><span class="n">C</span><span class="p">;</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSGetSolution</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="o">&amp;</span><span class="n">C</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FormInitialCondition</span><span class="p">(</span><span class="n">iga</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="o">&amp;</span><span class="n">user</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">  </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TSSolve</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">C</span><span class="p">);</span><span class="n">CHKERRQ</span><span class="p">(</span><span class="n">ierr</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="5-build-instructions">5 · Build instructions</h2>
+<p>Copy the files into the <strong><code>demo/heat/</code></strong> folder of your PetIGA clone (or any folder in <code>$PETIGA_DIR/demo</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">     </span>cp<span class="w"> </span>-r<span class="w"> </span>heat2d<span class="w">  </span><span class="nv">$PETIGA_DIR</span>/demo/
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">     </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$PETIGA_DIR</span>/demo/heat2d
+</code></pre></div>
+<p>Compile:</p>
+<div class="highlight"><pre><span></span><code>```bash
+    make heat2D
+```
+</code></pre></div>
+<h2 id="6-running-the-solver">6 . Running the solver</h2>
+<p>Edit <code>run_heat2d.sh</code> to suit your cluster queue (Slurm, PBS, etc)</p>
+<p><strong>Example run on 128 MPI ranks</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="w">    </span><span class="c1">#!/bin/bash</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">#SBATCH -t 04:00:00</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="c1">#SBATCH -n 128</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="c1">#SBATCH -o &quot;%x.o%j&quot;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="c1">#SBATCH -e &quot;%x.e%j&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="c1">#SBATCH --job-name=&quot;heat2D&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="c1">#SBATCH --mem-per-cpu=1G</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="c1">#SBATCH -p RM</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="c1"># Run the main program</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span>mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">128</span><span class="w"> </span>./heat2D<span class="w"> </span>-N<span class="w"> </span><span class="m">100</span><span class="w"> </span>-dt<span class="w"> </span>5e-4<span class="w"> </span>-total_time<span class="w"> </span><span class="m">100</span>.0<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SLURM_JOB_NAME</span><span class="si">}</span><span class="s2">.o</span><span class="nv">$id</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="7-results-visualisation">7 · Results &amp; visualisation</h2>
+<p><strong>Expected output files</strong></p>
+<ul>
+<li><code>heat0.dat</code>, <code>heat4000.dat</code>, … (PetIGA solution binary snapshots)  </li>
+<li><code>lump.dat</code> file containing the lumped mass matrix vector</li>
+<li><code>igaphase.dat</code> file containing IGA metadata necessary for postprocessing</li>
+</ul>
+<p><strong>Convert <code>.dat</code> files to VTK for ParaView</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">igakit.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">PetIGA</span><span class="p">,</span><span class="n">VTK</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linspace</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pool</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># read in discretization info and potentially geometry</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">nrb</span> <span class="o">=</span> <span class="n">PetIGA</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;igaphase.dat&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># enter the refinement factor</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">refinement</span> <span class="o">=</span> <span class="mi">2</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1"># write a function to sample the nrbs object</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="n">uniform</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">U</span><span class="p">:</span> <span class="n">linspace</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">U</span><span class="p">)</span><span class="o">*</span><span class="n">refinement</span><span class="p">))</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="c1"># function to print the fields into VTK files</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">print_file</span><span class="p">(</span><span class="n">infile</span><span class="p">):</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>    <span class="n">sol</span> <span class="o">=</span> <span class="n">PetIGA</span><span class="p">()</span><span class="o">.</span><span class="n">read_vec</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span><span class="n">nrb</span><span class="p">)</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="n">outfile</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.vtk&quot;</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="n">VTK</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span>       <span class="c1"># output filename</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>        <span class="n">nrb</span><span class="p">,</span>                    <span class="c1"># igakit NURBS object</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>        <span class="n">fields</span><span class="o">=</span><span class="n">sol</span><span class="p">,</span>             <span class="c1"># sol is the numpy array to plot</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>        <span class="n">scalars</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;T&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>    <span class="n">list_of_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;heat*.dat&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>    <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">print_file</span><span class="p">,</span> <span class="n">list_of_files</span><span class="p">)</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total post-processing time = </span><span class="si">%f</span><span class="s1"> secs&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">))</span>
+</code></pre></div>
+Open the generated <code>heatXXXX.vtk</code> files in ParaView to visualise the temperature field.</p>
+<p><img alt="diagram" src="../files/heat2d.jpg" /></p>
+<figure style="text-align:center">
+  <figcaption>
+    <strong>Figure&nbsp;1 –</strong>
+    Numerical solution of the 2-D heat-conduction problem.<br>
+    Left → initial condition (<em>t</em> = 0);&nbsp;
+    centre → intermediate state (<em>t</em> = 10s);&nbsp;
+    right → steady-state (<em>t</em> = 100s) where the field has relaxed to&nbsp;<em>T</em> ≈ 66.
+  </figcaption>
+</figure>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2025 <a href="https://github.com/Aditya0809"  target="_blank" rel="noopener">Aditya Paspunurwar</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Aditya0809" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/aditya-paspunurwar/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
