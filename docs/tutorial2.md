@@ -265,3 +265,13 @@ Open ch2d*.vtk in ParaView; colour by scalar c. You should see:
 3. Late time – two bulk regions separated by a smooth interface whose thickness matches \( \sqrt(\alpha) \).
 ​
 
+<figure style="text-align:center">
+  <img src="./files/ch2d.png"
+       alt="Phase separation: implicit (top) vs explicit (bottom)">
+  <figcaption>
+    <strong>Figure&nbsp;2 – 2-D Cahn–Hilliard: implicit&nbsp;vs explicit.</strong><br>
+    <em>Top row</em> – implicit scheme snapshots at&nbsp;t₀, t₁, t₂.<br>
+    <em>Bottom row</em> – explicit scheme at the same times.<br>
+    Both solvers conserve mass and lower the Ginzburg–Landau free energy; interfaces sharpen and coarsen until two bulk phases remain.  
+  </figcaption>
+</figure>
