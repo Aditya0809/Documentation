@@ -260,13 +260,16 @@ Open the generated `heatXXXX.vtk` files in ParaView to visualise the temperature
 
 
 
-![Temperature field at three time points](images/heat_snapshots.png)
-
-*Figure 1 – Numerical solution of the 2-D heat-conduction problem.  
-Left → initial condition (t = 0 s);  
-centre → intermediate state (t ≈ 10 s);  
-right → steady-state (t ≈ 100 s) where the field has relaxed to a uniform value \(T \simeq 66\).*
-
+<figure style="text-align:center">
+  <img src="files/heat2d.png" alt="Temperature snapshots">
+  <figcaption>
+    <strong>Figure&nbsp;1 –</strong>
+    Numerical solution of the 2-D heat-conduction problem.<br>
+    Left → initial condition (<em>t</em> = 0 s);&nbsp;
+    centre → intermediate state (<em>t</em> ≈ 10 s);&nbsp;
+    right → steady-state (<em>t</em> ≈ 100 s) where the field has relaxed to&nbsp;<em>T</em> ≈ 66.
+  </figcaption>
+</figure>
 
 
 
